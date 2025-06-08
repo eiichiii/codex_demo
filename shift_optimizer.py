@@ -1,7 +1,7 @@
 import csv
 import itertools
 from collections import defaultdict
-
+import argparse
 
 def load_shift_availability(path):
     """Load availability from shift.csv.
@@ -121,18 +121,35 @@ def output_schedule(schedule, out_path):
             writer.writerow([day] + list(schedule[day]))
 
 
+def parse_args():
+    """Parse command line arguments."""
+    parser = argparse.ArgumentParser(description="Optimize shift schedule")
+    parser.add_argument("--shift", help="Path to shift.csv")
+    parser.add_argument("--attr", help="Path to attribute.csv")
+    parser.add_argument("--out", help="Path for output csv")
+    return parser.parse_args()
+
+
 def main():
-    shift_path = input('shift.csvのパスを入力してください: ')
-    attr_path = input('attribute.csvのパスを入力してください: ')
-    out_path = input('出力先csvのパスを入力してください: ')
+    args = parse_args()
+    shift_path = args.shift or input('shift.csvのパスを入力してください: ')
+    attr_path = args.attr or input('attribute.csvのパスを入力してください: ')
+    out_path = args.out or input('出力先csvのパスを入力してください: ')
 
     days, availability, names = load_shift_availability(shift_path)
     attributes = load_attributes(attr_path)
     schedule, counts = build_schedule(days, availability, attributes)
     output_schedule(schedule, out_path)
-    unique_committee = {n for n in counts if attributes.get(n, {}).get("committee") and counts[n] > 0}
-    unique_male = {n for n in counts if attributes.get(n, {}).get("gender") == "male" and counts[n] > 0}
-    unique_female = {n for n in counts if attributes.get(n, {}).get("gender") == "female" and counts[n] > 0}
+
+    unique_committee = {
+        n for n in counts if attributes.get(n, {}).get("committee") and counts[n] > 0
+    }
+    unique_male = {
+        n for n in counts if attributes.get(n, {}).get("gender") == "male" and counts[n] > 0
+    }
+    unique_female = {
+        n for n in counts if attributes.get(n, {}).get("gender") == "female" and counts[n] > 0
+    }
 
     print('各メンバーのアサイン回数:')
     for name, c in counts.items():
