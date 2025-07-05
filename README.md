@@ -1,17 +1,15 @@
-# Shift Optimizer
+# シフト最適化ツール
 
-This repository contains a simple script to create an optimized shift schedule.
+このリポジトリには、シフト表を最適化して作成するシンプルなスクリプトが含まれています。
 
-## Usage
+## 使い方
 
-Prepare two CSV files:
+次の 2 つの CSV ファイルを準備します。
 
-1. `shift.csv` &ndash; availability table. The first column should be member
-   names and the following columns indicate availability with `○`.
-2. `attribute.csv` &ndash; member attributes with columns `name`, `gender`, and
-   `committee` (`〇` when a member belongs to the committee).
+1. `shift.csv` – メンバーの空き情報をまとめた表です。最初の列にメンバー名を記載し、後続の列では `○` を使ってシフトに入れるかどうかを示します。
+2. `attribute.csv` – メンバーの属性をまとめたファイルで、`name`、`gender`、`committee` の列を持ちます。委員会に所属している場合は `〇` を記載します。
 
-Run the optimizer:
+最適化スクリプトを次のように実行します。
 
 ```bash
 python shift_optimizer.py --shift path/to/shift.csv \
@@ -19,4 +17,4 @@ python shift_optimizer.py --shift path/to/shift.csv \
                           --out path/to/output.csv
 ```
 
-If any of the arguments are omitted, the script will prompt for them.
+引数を省略した場合は、実行中にファイルパスの入力を求められます。
